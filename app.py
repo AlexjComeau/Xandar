@@ -11,7 +11,7 @@ def index():
 @app.route("/chat", methods=["POST"])
 def chat():
     message = request.json["message"]
-    prompt = f"Edith, the helpful AI assistant: {message}"
+    prompt = f"Xandar, the helpful AI assistant: {message}"
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
