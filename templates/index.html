@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Xandar - AI Help Desk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+        }
+
+        #header {
+            background-color: #1c2e4a;
+            padding: 20px;
+            color: #fff;
+            font-size: 24px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #chat {
+            background-color: #ffffff;
+            padding: 20px;
+            width: 50%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+            max-height
+            : 600px;
+            overflow-y: scroll;
+        }
+    
+        #input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 10px;
+            width: 50%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+    
+        #message {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+    
+        #send-button {
+            border: none;
+            background-color: #1c2e4a;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        .message-container {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 20px;
+        }
+    
+        .bot-message {
+            background-color: #eee;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+    
+        .user-message {
+            background-color: #1c2e4a;
+            color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            Xandar - AI Help Desk
+        </div>
+        <div id="chat">
+            <div class="message-container bot-message">
+                Welcome to Xandar! How can I help you today?
+            </div>
+        </div>
+        <div id="input">
+            <input type="text" id="message" placeholder="Type your message here...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const chat = document.querySelector('#chat');
+        const messageInput = document.querySelector('#message');
+        const sendButton = document.querySelector('#send-button');
+        const addBotMessage = (message) => {
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('message-container', 'bot-message');
+            messageContainer.innerText = message;
+            chat.appendChild(messageContainer);
+        };
+    
+        const addUserMessage = (message) => {
+            const messageContainer = document.createElement('div');
+            messageContainer.classList.add('message-container', 'user-message');
+            messageContainer.innerText = message;
+            chat.appendChild(messageContainer);
+        };
+    
+        const sendMessage = () => {
+            const message = messageInput.value;
+            if (message.trim() === '') {
+                return;
+            }
+            addUserMessage(message);
+            messageInput.value = '';
+            axios.post('http://localhost:5000/chat', { message })
+                .then(response => {
+                    const message = response.data.message;
+                    addBotMessage(message);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        };
+    
+        sendButton.addEventListener('click', sendMessage);
+    
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
