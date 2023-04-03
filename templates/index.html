@@ -22,12 +22,17 @@
         }
 
         #header {
-            background-color: #1c2e4a;
+            background-color: #f0f4f8;
             padding: 20px;
-            color: #fff;
+            color: #1c2e4a;
             font-size: 24px;
             width: 100%;
             text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         #chat {
@@ -95,13 +100,10 @@
     </style>
 </head>
 <body>
-    <div id="chat-header">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Xandar Logo" width="50">
-        <h2>Xandar - AI Help Desk</h2>
-    </div>    
     <div id="container">
         <div id="header">
-            Xandar - AI Help Desk
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Xandar Logo" width="150">
+            GPT Powered Help Desk
         </div>
         <div id="chat">
             <div class="message-container bot-message">
@@ -111,52 +113,50 @@
         <div id="input">
             <input type="text" id="message" placeholder="Type your message here...">
             <button id="send-button">Send</button>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        const chat = document.querySelector('#chat');
-        const messageInput = document.querySelector('#message');
-        const sendButton = document.querySelector('#send-button');
-        const addBotMessage = (message) => {
-            const messageContainer = document.createElement('div');
-            messageContainer.classList.add('message-container', 'bot-message');
-            messageContainer.innerText = message;
-            chat.appendChild(messageContainer);
-        };
-    
-        const addUserMessage = (message) => {
-            const messageContainer = document.createElement('div');
-            messageContainer.classList.add('message-container', 'user-message');
-            messageContainer.innerText = message;
-            chat.appendChild(messageContainer);
-        };
-    
-        const sendMessage = () => {
-            const message = messageInput.value;
-            if (message.trim() === '') {
+          </div>
+          <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+          <script>
+            const chat = document.querySelector('#chat');
+            const messageInput = document.querySelector('#message');
+            const sendButton = document.querySelector('#send-button');
+          
+            const addBotMessage = (message) => {
+              const messageContainer = document.createElement('div');
+              messageContainer.classList.add('message-container', 'bot-message');
+              messageContainer.innerText = message;
+              chat.appendChild(messageContainer);
+            };
+          
+            const addUserMessage = (message) => {
+              const messageContainer = document.createElement('div');
+              messageContainer.classList.add('message-container', 'user-message');
+              messageContainer.innerText = message;
+              chat.appendChild(messageContainer);
+            };
+          
+            const sendMessage = () => {
+              const message = messageInput.value;
+              if (message.trim() === '') {
                 return;
-            }
-            addUserMessage(message);
-            messageInput.value = '';
-            axios.post('http://localhost:5000/chat', { message })
+              }
+              addUserMessage(message);
+              messageInput.value = '';
+              axios.post('http://localhost:5000/chat', { message })
                 .then(response => {
-                    const message = response.data.message;
-                    addBotMessage(message);
+                  const message = response.data.message;
+                  addBotMessage(message);
                 })
                 .catch(error => {
-                    console.error(error);
+                  console.error(error);
                 });
-        };
-    
-        sendButton.addEventListener('click', sendMessage);
-    
-        messageInput.addEventListener('keydown', (event) => {
-            if (event.keyCode === 13) {
+            };
+          
+            sendButton.addEventListener('click', sendMessage);
+          
+            messageInput.addEventListener('keydown', (event) => {
+              if (event.keyCode === 13) {
                 event.preventDefault();
                 sendMessage();
-            }
-        });
-    </script>
-</body>
-</html>
+              }
+            });
+          </script>          
