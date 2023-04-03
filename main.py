@@ -13,7 +13,7 @@ class MessageOutput(BaseModel):
 
 @app.post("/chat", response_model=MessageOutput)
 async def chat(input_message: MessageInput):
-    prompt = f"Edith, the helpful AI assistant: {input_message.message}"
+    prompt = f"Xandar, the helpful AI assistant: {input_message.message}"
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
